@@ -1,0 +1,36 @@
+---
+- name: create flask application working dir 
+  file: 
+    path: /root/flask-app
+    state: directory 
+
+- name: copy Dockerfile to flask directory 
+  copy: 
+    src: ../files/Dockerfile
+    dest: /root/flask-app/Dockerfile
+
+- name: copy Dockerfile to flask directory
+  copy:
+    src: ../files/requirements.txt
+    dest: /root/flask-app/requirements.txt
+
+- name: generate application source code files 
+  template: 
+    src: ../templates/app.py.j2 
+    dest: /root/flask-app/app.py
+
+- name: build a docker container running flask application 
+  docker_image:
+    build:
+      path: /root/flask-app
+    name: "{{ app_image }}"
+    source: build
+
+- name: run shonsapp flask application 
+  docker_container:
+    name: myapp
+    image: "{{ app_image }}"
+    ports: 
+    - "{{ app_port }}:{{ app_port }}"
+    network_mode: host
+

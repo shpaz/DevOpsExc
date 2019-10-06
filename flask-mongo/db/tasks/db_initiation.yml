@@ -1,0 +1,19 @@
+- name: create data directory for mongo db server
+  file: 
+    path: /data
+    state: directory 
+
+- name: run mongodb server as a microservice
+  docker_container:
+    name: mongodb
+    image: "{{ mongo_image }}"
+    ports: 
+    - "{{ mongo_port }}:{{ mongo_port }}"
+    volumes:
+    - "/data:/data/db"
+    network_mode: host	
+ 
+- name: wait for database to start listening ...
+  wait_for: 
+    port: "{{ mongo_port }}"
+    delay: 10

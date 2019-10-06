@@ -1,0 +1,24 @@
+- name: create a collection named {{ table_name }} on {{ db_name }} database 
+  command: docker exec mongodb mongo "{{ db_name }}" --eval "db.createCollection('{{ table_name }}')" 
+
+- name: verify {{ table_name }} collection on {{ db_name }} database has been created 
+  command: docker exec mongodb mongo "{{ db_name }}" --eval "printjson(db.getCollectionNames())"
+  register: collection_names 
+
+- name: debug {{ db_name }} database content 
+  debug: var=collection_names
+
+- name: insert values into {{ table_name }} collection 
+  command: docker exec mongodb mongo "{{ db_name }}" --eval "{{ item }}"
+  with_items: 
+  - "db.pornstars.insertOne({'name':'shon'})"
+  - "db.pornstars.insertOne({'name':'tom'})"
+  - "db.pornstars.insertOne({'name':'ido'})"
+
+- name: fetch {{ db_name }} data 
+  command: docker exec mongodb mongo "{{ db_name }}" --eval "db.getCollection('{{ table_name }}').find().pretty()"
+  register: collection_data
+
+- name: debug {{ table_name }} collection content 
+  debug: var=collection_data
+  

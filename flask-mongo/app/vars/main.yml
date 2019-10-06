@@ -1,0 +1,4 @@
+---
+# vars file for app
+app_port: "5000"
+app_image: "app"
