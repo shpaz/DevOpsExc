@@ -3,4 +3,4 @@
 mongo_image: "mongo" 
 mongo_port: "27017"
 db_name: "movies"
-table_name: "pornstars"
+table_name: "fiction"

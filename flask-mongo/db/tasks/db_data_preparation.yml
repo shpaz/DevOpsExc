@@ -11,9 +11,9 @@
 - name: insert values into {{ table_name }} collection 
   command: docker exec mongodb mongo "{{ db_name }}" --eval "{{ item }}"
   with_items: 
-  - "db.pornstars.insertOne({'name':'shon'})"
-  - "db.pornstars.insertOne({'name':'tom'})"
-  - "db.pornstars.insertOne({'name':'ido'})"
+  - "db.{{ table_name }}.insertOne({'name':'shon'})"
+  - "db.{{ table_name }}.insertOne({'name':'tom'})"
+  - "db.{{ table_name }}.insertOne({'name':'ido'})"
 
 - name: fetch {{ db_name }} data 
   command: docker exec mongodb mongo "{{ db_name }}" --eval "db.getCollection('{{ table_name }}').find().pretty()"
