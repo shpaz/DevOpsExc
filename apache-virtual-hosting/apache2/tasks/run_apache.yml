@@ -1,0 +1,44 @@
+--- 
+- name: install apache2 http server 
+  apt:
+    name: apache2
+    state: latest 
+  when: ansible_distribution == 'Ubuntu'
+
+- name: install apache2 http server
+  apt:
+    name: apache2
+    state: latest 
+  when: ansible_distribution == 'Red Hat Enterprise Linux'
+   
+- name: create virtual host website directory 
+  file: 
+    state: directory 
+    path:  /var/www/example.com/public_html
+    recurse: yes
+
+- name: grant permissions to /var/www directory 
+  file:
+    state: directory
+    path:  /var/www/
+    mode: 755 
+
+- name: copy website's html file into /var/www directory 
+  template:
+    src: ../templates/index.html.j2
+    dest: /var/www/{{ website_name }}/public_html/index.html
+
+- name: copy website's config file into sites-available directory 
+  template:
+    src: ../templates/example.com.conf.j2
+    dest: /etc/apache2/sites-available/{{ website_name }}.conf
+
+
+- name: enable website
+  shell: "{{ item }}"
+  with_items: 
+  - "a2ensite {{ website_name }}"
+  - "a2dissite 000-default.conf"
+  notify:
+    - restart apache2
+
