@@ -1,0 +1,13 @@
+---
+# tasks file for iperf3
+
+- name: include iperf3 server tasklist
+  include: run_iperf3_server.yml
+  
+- name: include iperf3 client tasklist
+  include: run_iperf3_client.yml
+  with_items: "{{ groups['servers'] }}"
+  when: inventory_hostname != item
+
+- name: include cleanup tasklist
+  import_tasks: cleanup.yml

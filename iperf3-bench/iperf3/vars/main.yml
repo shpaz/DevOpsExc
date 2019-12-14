@@ -1,0 +1,4 @@
+---
+# vars file for iperf3
+server: "mon6"
+client: "mon0"

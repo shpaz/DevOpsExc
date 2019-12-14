@@ -1,0 +1,9 @@
+- name: run iperf3 server on detached mode 
+  docker_container: 
+    name: iperf3-server 
+    image: "{{ iperf3_docker_image }}"
+    detach: yes
+    command: "-s"
+    ports:
+    - 5201:5201
+

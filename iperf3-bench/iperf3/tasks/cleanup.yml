@@ -1,0 +1,10 @@
+- name: clean iperf3 client 
+  docker_container: 
+    name: iperf3-client 
+    state: absent
+
+- name: clean iperf3 server 
+  docker_container:
+    name: iperf3-server
+    state: absent
+

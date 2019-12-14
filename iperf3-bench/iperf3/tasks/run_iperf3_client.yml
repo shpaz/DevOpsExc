@@ -1,0 +1,36 @@
+- name: running bench from {{ inventory_hostname }} towards {{ item }} 
+  docker_container: 
+    name: iperf3-client 
+    image: "{{ iperf3_docker_image }}"
+    command: "-c {{ item }}"
+    detach: no
+    network_mode: host
+  register: output
+  run_once: yes
+
+- name: filter bandwidth results related to test
+  shell: echo {{ output }} | egrep -e "Bandwidth" -A 10 | awk '{print $7}' | egrep -e "^[0-9]" 
+  register: bandwidth_results
+  run_once: yes
+
+- name: sort for mathematical analysis 
+  set_fact: 
+    manipulated_results: "{{ bandwidth_results.stdout_lines | unique | sort() }}"
+  run_once: yes
+
+- name: debug
+  set_fact:
+    result: "{{ manipulated_results }}"
+  run_once: yes
+
+- name: debug
+  debug: var=result
+  run_once: yes
+ 
+- blockinfile:
+    create: yes
+    path: "/tmp/{{ inventory_hostname}}-to-{{ item }}.txt"
+    content: "{{ manipulated_results }}"
+  delegate_to: localhost
+  run_once: yes
+

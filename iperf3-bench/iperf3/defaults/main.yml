@@ -1,0 +1,3 @@
+---
+# defaults file for iperf3
+iperf3_docker_image: "networkstatic/iperf3"
