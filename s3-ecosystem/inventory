@@ -1,0 +1,7 @@
+[cache-servers]
+cacher1
+cacher2
+
+[lb-servers]
+lb1
+lb2

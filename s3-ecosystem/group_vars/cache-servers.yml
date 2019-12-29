@@ -1,0 +1,6 @@
+#Please change to the correct URL
+s3_url: "http://rgws-floating-name.service.domain1:8000"
+
+#Please change it in your production environment
+nginx_cache_dir: "/var/log/nginx"
+nginx_cache_size: "20G"

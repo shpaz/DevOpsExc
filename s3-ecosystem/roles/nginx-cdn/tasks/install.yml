@@ -1,0 +1,29 @@
+- name: Add nginx repo on Ubuntu
+  apt_repository:
+    repo: deb [trusted=yes] http://nginx.org/packages/ubuntu/ "{{ ansible_distribution_release }}" nginx
+    state: present
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Add nginx repo on RHEL
+  yum_repository:
+    name: nginx
+    gpgcheck: no
+    baseurl: http://nginx.org/packages/rhel/$releasever/$basearch/
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+
+- name: Install nginx on Ubuntu
+  apt: 
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install nginx on Red Hat
+  yum:
+    name: nginx
+    state: latest
+    update_cache: yes
+  when: ansible_distribution == 'CentOS' or ansible_distribution == 'Red Hat Enterprise Linux'
+  
+  
+  

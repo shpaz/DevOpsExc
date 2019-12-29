@@ -1,0 +1,20 @@
+upstream cache_servers {
+    # Using the same hash as the cache hash in the cacher servers
+    hash $uri$request_method$request_body$http_range consistent;
+    # List of all cacher servers
+    {% for ip in cache_servers_addresses %}
+    server {{ ip }} max_fails=1 fail_timeout=5s;
+    {% endfor %}
+}
+server {
+    listen       80;
+    server_name  localhost;
+    location / {
+    proxy_pass http://cache_servers;
+    proxy_http_version 1.1;
+    proxy_set_header Range $http_range;
+    proxy_set_header Authorization $http_authorization;
+    proxy_set_header Host $host;
+    client_max_body_size 20G;
+    }
+}
