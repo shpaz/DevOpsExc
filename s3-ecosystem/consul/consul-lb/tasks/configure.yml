@@ -1,0 +1,9 @@
+--- 
+- name: create configuration files for consul deployment 
+  template: 
+    src: "{{ item }}"
+    dest: "/etc/consul.d/"
+  with_items:
+  - "rgw1.json"
+  - "default.json"
+  - "docker-compose.yml"

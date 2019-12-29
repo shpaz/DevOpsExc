@@ -1,0 +1,5 @@
+consul_image: "consul"
+dc_name: "dc1"
+domain_name: "domain1"
+s3_ip: "192.168.50.10"
+s3_port: "8080"

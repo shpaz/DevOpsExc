@@ -1,0 +1,14 @@
+{
+  "service": {
+    "id": "ceph-nano-ceph",
+    "name": "rgws-floating-name",
+    "address": "{{ s3_ip }}",
+    "port": {{ s3_port }},
+    "check": {
+    "http": "http://{{ s3_ip }}:{{ s3_port }}",
+    "interval": "10s",
+    "timeout": "1s"
+    }
+  }
+}
+
