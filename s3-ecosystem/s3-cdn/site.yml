@@ -3,5 +3,5 @@
   become: true
   gather_facts: true
   roles:
-    - nginx-cdn
+    - s3-cdn
 
