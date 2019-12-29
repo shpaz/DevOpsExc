@@ -1,6 +1,6 @@
 ---
 # handlers file for nginx-cdn
-- name: nginx_restart 
+- name: nginx restart 
   service: 
     name: nginx
     state: restarted

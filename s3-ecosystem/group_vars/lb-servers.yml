@@ -1,5 +1,5 @@
 #IPs of the cacher servers
 # add gather facts for server ip 
-cache_servers_adresses:
-  - "192.168.44.101"
-  - "192.168.44.102"
+cache_servers_addresses:
+  - "mon0"
+  - "mon1"

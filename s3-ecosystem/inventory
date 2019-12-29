@@ -1,7 +1,5 @@
 [cache-servers]
-cacher1
-cacher2
+mon1
 
 [lb-servers]
-lb1
-lb2
+mon0

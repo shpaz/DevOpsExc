@@ -1,14 +1,7 @@
 ---
-- hosts: nginx-cachers
+- hosts: all
   become: true
   gather_facts: true
   roles:
-    - install_nginx
-    - nginx-cacher
+    - nginx-cdn
 
-- hosts: nginx-lbs
-  become: true
-  gather_facts: true
-  roles:
-    - install_nginx
-    - nginx-lb
