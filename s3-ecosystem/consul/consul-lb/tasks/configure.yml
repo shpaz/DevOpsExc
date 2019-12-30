@@ -5,5 +5,5 @@
     dest: "/etc/consul.d/"
   with_items:
   - "rgw1.json"
-  - "default.json"
+  - "default.json.j2"
   - "docker-compose.yml"
