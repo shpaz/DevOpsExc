@@ -17,4 +17,4 @@
 
 - name: notify restart nginx task 
   debug: msg="restarting nginx service"
-  notify: "restart nginx" 
+  notify: "nginx restart" 
