@@ -1,0 +1,40 @@
+# Choose an optional name for the datacenter
+global:
+  datacenter: minidc
+  domain: consul
+# Enable the Consul Web UI via a NodePort
+ui:
+  service:
+    type: 'NodePort'
+
+# Enable Connect for secure communication between nodes
+connectInject:
+  enabled: true
+
+client:
+  enabled: true
+
+dns: 
+  enabled: true
+# Use only one Consul server for local development
+server:
+  replicas: 1
+  bootstrapExpect: 1
+  disruptionBudget:
+    enabled: true
+    maxUnavailable: 0
+  extraConfig: |
+    {
+     "service":{
+         "id":"ceph-nano-ceph",
+         "name":"rgws-floating-name",
+         "address":"http://192.168.1.31",
+         "port":8000,
+         "check":{
+            "http":"http://192.168.1.31:8000",
+            "interval":"10s",
+            "timeout":"1s"
+          }
+       }
+    }
+
