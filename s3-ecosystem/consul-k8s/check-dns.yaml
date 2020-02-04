@@ -8,6 +8,6 @@ spec:
       containers:
       - name: dns
         image: anubhavmishra/tiny-tools
-        command: ["dig",  "rgws-floating-name.service.minidc.consul."]
+        command: ["dig",  "s3.service.minidc.consul"]
       restartPolicy: Never
   backoffLimit: 4
