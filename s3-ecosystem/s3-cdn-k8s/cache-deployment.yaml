@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: s3-cdn-cache-service
+  labels:
+    app: s3-cdn
+spec:
+  ports:
+    - port: 80
+      targetPort: 80
+  selector:
+    app: s3-cdn
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: s3-cdn-cache-deployment 
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+        app: s3-cdn
+  template:
+    metadata: 
+      labels:
+        app: s3-cdn 
+    spec: 
+      containers:
+        - image: nginx
+          name: s3-cdn-cache
+          command: ["sh", "-c"]
+          args: ["envsubst '${CACHE_DIR} ${CACHE_SIZE} ${S3_URL}' < /etc/nginx/conf.d/default.template > /etc/nginx/conf.d/default.conf && nginx -g 'daemon off;'"]
+          env: 
+          - name: CACHE_DIR
+            value: /var/log/nginx 
+          - name: CACHE_SIZE
+            value: 20G 
+          - name: S3_URL 
+            value: http://192.168.1.31:8000
+          ports: 
+          - containerPort: 80
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.template
+              subPath: default.template
+              name: s3-cdn-cache-volume
+      volumes:
+      - name: s3-cdn-cache-volume
+        configMap:
+          name: cache-config
+   

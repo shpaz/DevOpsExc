@@ -1,0 +1,48 @@
+kind: ConfigMap 
+apiVersion: v1 
+metadata:
+  name: cache-config
+data:
+  default.template: | 
+    # Configuration values can be set as key-value properties
+    #config cache size and path to the cache directory
+    proxy_cache_path $CACHE_DIR levels=1:2 keys_zone=mycache:100m max_size=$CACHE_SIZE inactive=1d use_temp_path=off;
+    server {
+        listen       80;
+        server_name  cacher;
+        location / {
+        # the IP or name of the RGWs
+        proxy_pass $S3_URL;
+        # my cache configured at the top of the file
+        proxy_cache mycache;
+        proxy_http_version 1.1;
+        # Pass Range header to RGW
+        proxy_set_header Range $http_range;
+        # Pass AWS authorization header
+        proxy_set_header Authorization $http_authorization;
+        # Getting 403 if this header not set
+        proxy_set_header Host $host;
+        # Cache all 200 OK's for 30 days
+        proxy_cache_valid 200 206 1d;
+        # Use stale cache file in all errors from upstream if we can
+        proxy_cache_use_stale error timeout invalid_header updating http_500 http_502 http_503 http_504;
+        # Lock the cache so that only one request can populate it at a time
+        proxy_cache_lock on;
+        # prevent convertion of head requests to get requests
+        proxy_cache_convert_head off;
+        # Authorization header for example:  Authorization: AWS4-HMAC-SHA256 Credential=test/20190604/us-east-1/s3/aws4_request, SignedHeaders=host;x-amz-content-sha256;x-amz-date, Signature=6f0e509849cb9a97da409507520472aa7602351890b4d6e9df53bb9d81bd31db
+        # this REGEX taking Authoriation header and parse only the Credential= , in the above example $cred should equal "Credential=test/20190604/us-east-1/s3/aws4_request"
+        if ($http_authorization ~* (Credential=.*\/aws4_request)){
+            set $cred $1;
+        }
+        #In case the user is using AWS auth v2
+        if ($cred = ''){
+        set $cred $http_authorization;
+        }
+    
+        # This is on which content the nginx to use for hashing the cache, that means that it will provide object only for authorized users and by URI 
+        proxy_cache_key "$uri$cred$request_method$request_body$http_range";
+        client_max_body_size 20G;
+        }
+    }
+    
