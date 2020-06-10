@@ -20,7 +20,7 @@
     name: 
     - requests
 
-- name: pull consul docker image 
+- name: pull consul container image 
   podman_image:
     name: "{{ consul_image }}"
 
