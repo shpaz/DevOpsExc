@@ -6,7 +6,7 @@
   "log_level": "INFO",
   "node_name": "{{ ansible_hostname }}",
   "server": true,
-  "bootstrap_expect": 2,
+  "bootstrap_expect": 3,
   "advertise_addr": "{{ hostvars[inventory_hostname]['ansible_' + consul_interface]['ipv4']['address'] }}",
 {% set ns = namespace() %}
 {% set ns.addresses = '' %}
