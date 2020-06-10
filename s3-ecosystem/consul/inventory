@@ -1,3 +1,4 @@
 [consul-servers]
-mon0
+ceph-s3-lb1
+ceph-s3-lb2
 

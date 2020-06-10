@@ -1,0 +1,16 @@
+version: '2'
+services:
+  consul:
+    image: "{{ consul_image }}"
+    hostname: "{{ ansible_hostname }}-consul"
+    network_mode: "host"
+    container_name: "{{ ansible_hostname }}-consul"
+    restart: always
+    environment:
+      - CONSUL_BIND_INTERFACE=docker0
+      - CONSUL_ALLOW_PRIVILEGED_PORTS="8301"
+      - CONSUL_DISABLE_PERM_MGMT=
+    volumes:
+      - /etc/consul.d:/etc/consul:z
+    command: consul agent -ui -config-dir /etc/consul
+

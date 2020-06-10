@@ -1,7 +1,0 @@
---- 
-- name: run consul server via docker-compose  
-  docker_compose: 
-    project_src: /etc/consul.d
-    state: present
-
-
